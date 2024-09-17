@@ -4,12 +4,6 @@ import { UIbuttons } from "./components/UIbuttons";
 import "./index.css";
 
 const App = () => {
-  const colorTypes = [
-    ["bg-red-500", "bg-green-500", "bg-blue-500", "bg-yellow-500"],
-    ["bg-orange-500", "bg-purple-500", "bg-pink-500", "bg-indigo-500"],
-    ["bg-gray-500", "bg-teal-500", "bg-cyan-500", "bg-lime-500"],
-    ["bg-emerald-500", "bg-rose-500", "bg-violet-500", "bg-sky-500"],
-  ]; //COLORES
 
   const [colors, setColors] = useState([
     "bg-red-500",
@@ -17,6 +11,18 @@ const App = () => {
     "bg-blue-500",
     "bg-yellow-500",
   ]);
+
+  const [changeColors, setChangeColors] = useState([
+    "bg-purple-500",
+    "bg-pink-500",
+    "bg-cyan-500",
+    "bg-orange-500",
+    "bg-indigo-500",
+    "bg-gray-500",
+    "bg-teal-500",
+    "bg-lime-500",
+  ]);
+
   const [pattern, setPattern] = useState([]);
   const [playerPattern, setPlayerPattern] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -110,18 +116,20 @@ const App = () => {
     return play();
   };
 
+  //FUNCION QUE CAMBIA LOS COLORES DEL JUEGO
   const handleColors = () => {
-    let index = Math.floor(Math.random() * 4);
-    do {
-      index = Math.floor(Math.random() * 4);
-    } while (colorTypes[0][index] === colors[0]);
-    setColors([
-      colorTypes[0][index],
-      colorTypes[1][index],
-      colorTypes[2][index],
-      colorTypes[3][index],
-    ]);
+    let availableColors = [...changeColors];
+    let newColors = [];
+    for (let i = 0; i < 4; i++) {
+      let randomIndex = Math.floor(Math.random() * availableColors.length);
+      let chosenColor = availableColors[randomIndex];
+      newColors.push(chosenColor);
+      availableColors = availableColors.filter((color, index) => index !== randomIndex);
+    }
+    setChangeColors(availableColors.concat(colors));
+    setColors(newColors);
   };
+  
 
   return isPlaying ? (
     <main className="w-full h-screen flex flex-col justify-center items-center bg-gray-800">
@@ -145,7 +153,9 @@ const App = () => {
             />
           ))}
         </div>
-        <h2 className="text-white text-center mt-4 font-serif">Score: {Score}</h2>
+        <h2 className="text-white text-center mt-4 font-serif">
+          Score: {Score}
+        </h2>
       </div>
     </main>
   ) : isPlaying === false && haslost ? (
