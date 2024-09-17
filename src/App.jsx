@@ -125,19 +125,28 @@ const App = () => {
 
   return isPlaying ? (
     <main className="w-full h-screen flex flex-col justify-center items-center bg-gray-800">
-      <div className="grid grid-rows-2 grid-cols-2 gap-2">
-        {colors.map((color, index) => (
-          <Buttons
-            key={index}
-            color={color}
-            active={active}
-            showingPattern={showingPattern}
-            index={index}
-            onClick={handleClick}
-          />
-        ))}
+      <div className="-mt-48">
+        <h2
+          className={`text-white font-serif text-center ${
+            showingPattern === false ? "visible" : "invisible"
+          }`}
+        >
+          Tu turno
+        </h2>
+        <div className="grid grid-rows-2 grid-cols-2 gap-2">
+          {colors.map((color, index) => (
+            <Buttons
+              key={index}
+              color={color}
+              active={active}
+              showingPattern={showingPattern}
+              index={index}
+              onClick={handleClick}
+            />
+          ))}
+        </div>
+        <h2 className="text-white text-center mt-4 font-serif">Score: {Score}</h2>
       </div>
-      <h4 className="text-white">Score: {Score}</h4>
     </main>
   ) : isPlaying === false && haslost ? (
     <section className="w-full h-screen bg-gray-800 flex flex-col justify-center items-center z-10 backdrop-brightness-0">
@@ -167,8 +176,8 @@ const App = () => {
       </h1>
       <div className="flex flex-col justify-center items-center absolute top-0 left-0 right-0 bottom-0 -mt-44">
         <span>
-          <label className="text-white mb-2" htmlFor="gameModes">
-            Select game mode:{" "}
+          <label className="text-white mb-2 mr-2" htmlFor="gameModes">
+            Select game mode:
           </label>
           <select
             name="gameModes"
@@ -179,7 +188,7 @@ const App = () => {
                 ? setGameModes({ addClass: 1100, removeClass: 500 })
                 : target.value === "medium"
                 ? setGameModes({ addClass: 800, removeClass: 400 })
-                : setGameModes({ addClass: 600, removeClass: 300 })
+                : setGameModes({ addClass: 550, removeClass: 200 })
             }
           >
             <option value="easy">Easy</option>
