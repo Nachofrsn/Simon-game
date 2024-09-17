@@ -29,6 +29,10 @@ const App = () => {
   });
   const [leaderboard, setLeaderboard] = useState([]); //CREAR LEADERBOARD CON LOCAL STORAGE
   const [haslost, setHaslost] = useState(false);
+  const [gameModes, setGameModes] = useState({
+    addClass: 1100,
+    removeClass: 500,
+  });
 
   useEffect(() => {
     if (isPlaying) {
@@ -80,7 +84,7 @@ const App = () => {
       setActive({ activated: true, activeColor: color });
       setTimeout(() => {
         setActive({ activated: false, activeColor: "" });
-      }, 500);
+      }, gameModes.removeClass);
     } else {
       setShowingPattern(true);
       let i = 0;
@@ -95,7 +99,7 @@ const App = () => {
           clearInterval(interval);
           setShowingPattern(false);
         }
-      }, 1100);
+      }, gameModes.addClass);
     }
   };
 
@@ -137,7 +141,9 @@ const App = () => {
     </main>
   ) : isPlaying === false && haslost ? (
     <section className="w-full h-screen bg-gray-800 flex flex-col justify-center items-center z-10 backdrop-brightness-0">
-      <h2 className="text-white">Game over. Score: {localStorage.getItem("score")}</h2>
+      <h2 className="text-white">
+        Game over. Score: {localStorage.getItem("score")}
+      </h2>
       <h2 className="text-white">Reset game?</h2>
       <span>
         <button
@@ -156,10 +162,31 @@ const App = () => {
     </section>
   ) : (
     <section className="w-full h-screen bg-gray-800 relative">
-      <h1 className="mb-2 text-4xl text-white text-center pt-5 translate-y-11 duration-700 font-mono">
+      <h1 className="mb-6 text-4xl text-white text-center pt-5 translate-y-11 duration-700 font-mono">
         Simon Game
       </h1>
       <div className="flex flex-col justify-center items-center absolute top-0 left-0 right-0 bottom-0 -mt-44">
+        <span>
+          <label className="text-white mb-2" htmlFor="gameModes">
+            Select game mode:{" "}
+          </label>
+          <select
+            name="gameModes"
+            id="modes"
+            className="mb-8 p-1 bg-black text-white rounded-lg"
+            onChange={({ target }) =>
+              target.value === "easy"
+                ? setGameModes({ addClass: 1100, removeClass: 500 })
+                : target.value === "medium"
+                ? setGameModes({ addClass: 800, removeClass: 400 })
+                : setGameModes({ addClass: 600, removeClass: 300 })
+            }
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </span>
         <div className="grid grid-rows-2 grid-cols-2 gap-2">
           {colors.map((color, index) => (
             <Buttons
@@ -171,8 +198,8 @@ const App = () => {
             />
           ))}
         </div>
-        <UIbuttons onClick={() => setIsPlaying(true)} text="Start"/>
-        <UIbuttons onClick={handleColors} text="Change colors"/>
+        <UIbuttons onClick={handleColors} text="Change colors" />
+        <UIbuttons onClick={() => setIsPlaying(true)} text="Start" />
       </div>
     </section>
   );
