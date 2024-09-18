@@ -1,3 +1,4 @@
+
 export const Buttons = ({ color, active, showingPattern, index, onClick }) => {
   const { activated, activeColor } = active;
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Buttons } from "./components/Buttons";
 import { UIbuttons } from "./components/UIbuttons";
+import useSound from 'use-sound';
+import firstSound from '../src/sounds/firstSound.mp3';
 import "./index.css";
 
 const App = () => {
@@ -22,6 +24,8 @@ const App = () => {
     "bg-teal-500",
     "bg-lime-500",
   ]);
+
+  const [play] = useSound(firstSound);
 
   const [pattern, setPattern] = useState([]);
   const [playerPattern, setPlayerPattern] = useState([]);
@@ -97,6 +101,7 @@ const App = () => {
       const interval = setInterval(() => {
         if (i < pattern.length) {
           setActive({ activated: true, activeColor: pattern[i] });
+          play();
           setTimeout(() => {
             setActive({ activated: false, activeColor: "" });
           }, 500);
