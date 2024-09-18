@@ -3,27 +3,10 @@ import { Buttons } from "./components/Buttons";
 import { UIbuttons } from "./components/UIbuttons";
 import useSound from 'use-sound';
 import firstSound from '../src/sounds/firstSound.mp3';
+import { useColors } from "./hooks/useColors";
 import "./index.css";
 
 const App = () => {
-
-  const [colors, setColors] = useState([
-    "bg-red-500",
-    "bg-green-500",
-    "bg-blue-500",
-    "bg-yellow-500",
-  ]);
-
-  const [changeColors, setChangeColors] = useState([
-    "bg-purple-500",
-    "bg-pink-500",
-    "bg-cyan-500",
-    "bg-orange-500",
-    "bg-indigo-500",
-    "bg-gray-500",
-    "bg-teal-500",
-    "bg-lime-500",
-  ]);
 
   const [play] = useSound(firstSound);
 
@@ -37,12 +20,13 @@ const App = () => {
     activated: false,
     activeColor: "",
   });
-  const [leaderboard, setLeaderboard] = useState([]); //CREAR LEADERBOARD CON LOCAL STORAGE
   const [haslost, setHaslost] = useState(false);
   const [gameModes, setGameModes] = useState({
     addClass: 1100,
     removeClass: 500,
   });
+
+  const { colors, handleColors, handleColorSequence } = useColors(setShowingPattern, pattern, active, gameModes, setActive, play);
 
   useEffect(() => {
     if (isPlaying) {
@@ -89,52 +73,12 @@ const App = () => {
     setPattern([...pattern, colors[Math.floor(Math.random() * colors.length)]]);
   };
 
-  const handleColorSequence = (type, color) => {
-    if (type === "player") {
-      setActive({ activated: true, activeColor: color });
-      setTimeout(() => {
-        setActive({ activated: false, activeColor: "" });
-      }, gameModes.removeClass);
-    } else {
-      setShowingPattern(true);
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < pattern.length) {
-          setActive({ activated: true, activeColor: pattern[i] });
-          play();
-          setTimeout(() => {
-            setActive({ activated: false, activeColor: "" });
-          }, 500);
-          i++;
-        } else {
-          clearInterval(interval);
-          setShowingPattern(false);
-        }
-      }, gameModes.addClass);
-    }
-  };
-
   //FUNCION PARA MANEJAR LOS CLICKS DEL JUGADOR
   const handleClick = (color) => {
     setPlayerPattern([...playerPattern, color]);
     handleColorSequence("player", color);
     return play();
   };
-
-  //FUNCION QUE CAMBIA LOS COLORES DEL JUEGO
-  const handleColors = () => {
-    let availableColors = [...changeColors];
-    let newColors = [];
-    for (let i = 0; i < 4; i++) {
-      let randomIndex = Math.floor(Math.random() * availableColors.length);
-      let chosenColor = availableColors[randomIndex];
-      newColors.push(chosenColor);
-      availableColors = availableColors.filter((color, index) => index !== randomIndex);
-    }
-    setChangeColors(availableColors.concat(colors));
-    setColors(newColors);
-  };
-  
 
   return isPlaying ? (
     <main className="w-full h-screen flex flex-col justify-center items-center bg-gray-800">
@@ -171,13 +115,13 @@ const App = () => {
       <h2 className="text-white">Reset game?</h2>
       <span>
         <button
-          className="bg-blue-400 w-14 m-5"
+          className="bg-blue-400 w-14 m-5 p-2 hover:animate-pulse rounded-md"
           onClick={() => (setIsPlaying(true), setHaslost(false))}
         >
           Yes
         </button>
         <button
-          className="bg-blue-400 w-14"
+          className="bg-blue-400 w-14 p-2 hover:animate-pulse rounded-md"
           onClick={() => (setIsPlaying(false), setHaslost(false))}
         >
           No
