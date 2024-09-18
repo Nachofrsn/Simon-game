@@ -157,7 +157,7 @@ const App = () => {
     </section>
   ) : (
     <section className="w-full h-screen bg-gray-800 relative">
-      <h1 className="mb-3 text-4xl text-white text-center pt-5 translate-y-14 duration-700 font-mono">
+      <h1 className="mb-4 text-4xl text-white text-center pt-5 translate-y-14 duration-700 font-mono">
         Simon Game
       </h1>
       <div className="flex flex-col justify-center items-center absolute top-0 left-0 right-0 bottom-0 -mt-44 sm:mt-1">
