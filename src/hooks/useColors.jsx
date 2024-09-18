@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useColors = (dispatch, showingPatternType, pattern, active, gameModes, setActive, play) => {
   const [colors, setColors] = useState([
