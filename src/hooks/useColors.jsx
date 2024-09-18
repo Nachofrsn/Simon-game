@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useColors = (setShowingPattern, pattern, active, gameModes, setActive, play) => {
+export const useColors = (dispatch, showingPatternType, pattern, active, gameModes, setActive, play) => {
   const [colors, setColors] = useState([
     "bg-red-500",
     "bg-green-500",
@@ -42,7 +42,7 @@ export const useColors = (setShowingPattern, pattern, active, gameModes, setActi
         setActive({ activated: false, activeColor: "" });
       }, gameModes.removeClass);
     } else {
-      setShowingPattern(true);
+      dispatch({ type: showingPatternType, payload: true });
       let i = 0;
       const interval = setInterval(() => {
         if (i < pattern.length) {
@@ -54,7 +54,7 @@ export const useColors = (setShowingPattern, pattern, active, gameModes, setActi
           i++;
         } else {
           clearInterval(interval);
-          setShowingPattern(false);
+          dispatch({ type: showingPatternType, payload: false });
         }
       }, gameModes.addClass);
     }
